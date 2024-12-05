@@ -13,16 +13,25 @@
     <img
       src="logo.png"
       alt="YouTube Focus Icon"
-      width="80"
-      height="80"
+      width="125"
+      height="125"
       style="display: block; margin: 0 auto"
     />
 
-    <div style="text-align: center; margin-top: 1rem" title="Click to start the hack!">
-      <button
-        id="goToFAQ"
-      >Start Hack!</button>
+    <label class="switch">
+      <input type="checkbox" id="checkbox-subs" checked />
+      <span class="slider round"></span>
+      <span id="toggOnOff"></span>
+    </label>
+
+    <div
+      style="text-align: center; margin-top: 1rem"
+      title="Click to start the hack!"
+    >
+      <button id="startHack">Start Hack!</button>
     </div>
+
+    <div id="intSpeed">Current Speed:</div>
 
     <p style="text-align: center" id="nameYear"></p>
     <hr />

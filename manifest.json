@@ -16,5 +16,6 @@
       "matches": ["https://10ff.net/*"],
       "js": ["main.js"]
     }
-  ]
+  ],
+  "permissions": ["storage"]
 }

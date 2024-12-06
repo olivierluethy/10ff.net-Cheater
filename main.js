@@ -1,7 +1,15 @@
 // Add a listener for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "startHack") {
-    hack();
+    // Check if the element with class "overlayer active" exists
+    // To ensure the user can't start if the countdown for the game still exists
+    const overlayerElement = document.querySelector(".overlayer.active");
+
+    if (overlayerElement) {
+      alert("Game still in progress")
+    } else {
+      hack();
+    }
   }
 });
 

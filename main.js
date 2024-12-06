@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const overlayerElement = document.querySelector(".overlayer.active");
 
     if (overlayerElement) {
-      alert("Game still in progress")
+      alert("Game still in progress");
     } else {
       hack();
     }
@@ -31,27 +31,49 @@ function hack() {
       });
 
       const intervalId = setInterval(() => {
-        const highlightedText =
-          document.querySelector(".highlight").textContent;
-        const inputField = document.querySelector(".interface input");
+        // Get all elements with the class "map"
+        const mapElements = document.querySelectorAll(".map");
 
-        if (highlightedText) {
-          inputField.focus();
-          inputField.value = highlightedText + " ";
+        // Iterate over each map element
+        mapElements.forEach((mapElement) => {
+          // Get all elements that have BOTH "player-end" and "player-me" classes
+          const playerEndMeElements = mapElement.querySelectorAll(
+            ".player-end.player-me"
+          );
 
-          const inputEvent = new Event("input", { bubbles: true });
-          inputField.dispatchEvent(inputEvent);
-        }
+          // Check if there are any elements with both classes
+          if (playerEndMeElements.length > 0) {
+            // User has both classes, clear the interval
+            console.log("User  has both player-end and player-me classes.");
+            clearInterval(intervalId); // Stop the interval
+          } else {
+            // User doesn't have both classes
+            console.log(
+              "User  doesn't have both player-end and player-me classes."
+            );
+            const highlightedText =
+              document.querySelector(".highlight").textContent;
+            const inputField = document.querySelector(".interface input");
 
-        // Aktualisiere den Intervallwert, wenn randomly true ist
-        if (randomly) {
-          intervalValue = getRandomInterval(); // Neuen zufälligen Intervallwert generieren
-        }
+            if (highlightedText) {
+              inputField.focus();
+              inputField.value = highlightedText + " ";
 
-        // Sende den aktuellen Intervallwert an das Popup
-        chrome.runtime.sendMessage({
-          action: "updateSpeed",
-          speed: intervalValue,
+              const inputEvent = new Event("input", { bubbles: true });
+              inputField.dispatchEvent(inputEvent);
+            }
+
+            // Aktualisiere den Intervallwert, wenn randomly true ist
+            if (randomly) {
+              intervalValue = getRandomInterval(); // Neuen zufälligen Intervallwert generieren
+            }
+
+            // Sende den aktuellen Intervallwert an das Popup
+            chrome.runtime.sendMessage({
+              action: "updateSpeed",
+              speed: intervalValue,
+            });
+          }
         });
       }, intervalValue);
     });

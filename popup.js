@@ -29,8 +29,14 @@ function updateToggleText(randomly) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const startHackButton = document.getElementById("startHack");
+  const gameRestartButton = document.getElementById("gameRestart");
   const checkboxSubs = document.getElementById("checkbox-subs");
-  document.getElementById("intSpeed").textContent = "";
+  const intSpeed = document.getElementById("intSpeed");
+
+  if (intSpeed) {
+    intSpeed.textContent = "";
+  }
 
   // Initialisiere den Text beim Laden der Seite
   chrome.storage.local.get("randomly", (data) => {
@@ -46,25 +52,53 @@ document.addEventListener("DOMContentLoaded", () => {
     updateToggleText(isChecked); // Aktualisiere den Text sofort
   });
 
-  // Überprüfe, ob die Einstellungen blockiert sind
+  // Initiale Blockadeprüfung
   chrome.storage.local.get(["settingsBlocked"], (data) => {
-    const settingsBlocked = data.settingsBlocked || false; // Standard: nicht blockiert
+    const settingsBlocked = data.settingsBlocked || false;
+    updateUI(settingsBlocked);
+  });
+
+  // Listener für Änderungen in Chrome Storage
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === "local" && changes.settingsBlocked) {
+      const settingsBlocked = changes.settingsBlocked.newValue;
+      updateUI(settingsBlocked);
+    }
+  });
+
+  // Funktion zur Aktualisierung der UI
+  function updateUI(settingsBlocked) {
     if (settingsBlocked) {
       // Blockiere die Einstellungen
-      const startHackButton = document.getElementById("startHack");
-      // Create a linear gradient
       const gradient = "radial-gradient(circle, #f08080, #ff0000)";
-      // Apply the gradient to the button's background
       startHackButton.style.backgroundImage = gradient;
       startHackButton.style.borderColor = "1px solid white";
       startHackButton.style.color = "white";
       startHackButton.innerHTML = "Race finished!";
       startHackButton.disabled = true;
 
-      checkboxSubs.disabled = true;
+      intSpeed.textContent = "";
 
-      document.getElementById("gameRestart").style.display = "inline-block";
+      checkboxSubs.disabled = true;
+      gameRestartButton.style.display = "inline-block";
+    } else {
+      // Entblockiere die Einstellungen
+      startHackButton.style.backgroundImage = "";
+      startHackButton.style.borderColor = "";
+      startHackButton.style.color = "";
+      startHackButton.innerHTML = "Start Hack";
+      startHackButton.disabled = false;
+
+      checkboxSubs.disabled = false;
+      gameRestartButton.style.display = "none";
     }
+  }
+
+  // Event Listener für "Game Restart"-Button
+  gameRestartButton.addEventListener("click", () => {
+    chrome.storage.local.set({ settingsBlocked: false }, () => {
+      console.log("Game restarted, settings unblocked.");
+    });
   });
 });
 

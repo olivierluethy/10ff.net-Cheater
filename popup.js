@@ -46,20 +46,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updateToggleText(isChecked); // Aktualisiere den Text sofort
   });
 
-  const startHackButton = document.getElementById("startHack");
-
   // Überprüfe, ob die Einstellungen blockiert sind
   chrome.storage.local.get(["settingsBlocked"], (data) => {
     const settingsBlocked = data.settingsBlocked || false; // Standard: nicht blockiert
     if (settingsBlocked) {
       // Blockiere die Einstellungen
-      startHackButton.style.backgroundColor = "white";
-      startHackButton.style.borderColor = "1px solid black";
-      startHackButton.style.color = "black";
-      startHackButton.innerHTML = "Hack started";
+      const startHackButton = document.getElementById("startHack");
+      // Create a linear gradient
+      const gradient = "radial-gradient(circle, #f08080, #ff0000)";
+      // Apply the gradient to the button's background
+      startHackButton.style.backgroundImage = gradient;
+      startHackButton.style.borderColor = "1px solid white";
+      startHackButton.style.color = "white";
+      startHackButton.innerHTML = "Race finished!";
       startHackButton.disabled = true;
 
       checkboxSubs.disabled = true;
+
+      document.getElementById("gameRestart").style.display = "inline-block";
+    }
+  });
+});
+
+const restartButton = document.getElementById("gameRestart");
+
+restartButton.addEventListener("click", () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]) {
+      // Neuladen der aktuellen Webseite
+      chrome.tabs.reload(tabs[0].id);
     }
   });
 });

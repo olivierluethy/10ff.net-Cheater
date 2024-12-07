@@ -49,9 +49,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Listener für Nachrichten vom Content Script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "updateSpeed") {
+  if (request.action === "updateSpeedAndBlock") {
+    // Aktualisiere die Geschwindigkeit
     document.getElementById(
       "intSpeed"
     ).textContent = `Current Speed: ${request.speed}`;
+
+    // Blockiere die Einstellungen
+    const startHackButton = document.getElementById("startHack");
+    startHackButton.style.backgroundColor = "white";
+    startHackButton.style.borderColor = "1px solid black";
+    startHackButton.style.color = "black";
+    startHackButton.innerHTML = "Hack started";
+    startHackButton.disabled = true;
+
+    document.getElementById("checkbox-subs").disabled = true;
   }
 });

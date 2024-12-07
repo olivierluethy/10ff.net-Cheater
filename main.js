@@ -26,7 +26,7 @@ function hack() {
 
       // Sende den initialen Intervallwert an das Popup
       chrome.runtime.sendMessage({
-        action: "updateSpeed",
+        action: "updateSpeedAndBlock",
         speed: intervalValue,
       });
 
@@ -70,7 +70,7 @@ function hack() {
 
             // Sende den aktuellen Intervallwert an das Popup
             chrome.runtime.sendMessage({
-              action: "updateSpeed",
+              action: "updateSpeedAndBlock",
               speed: intervalValue,
             });
           }

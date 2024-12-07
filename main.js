@@ -13,6 +13,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+window.addEventListener("load", () => {
+  chrome.storage.local.set({ settingsBlocked: false });
+});
+
 function hack() {
   function getRandomInterval() {
     return Math.floor(Math.random() * 250) + 250;
@@ -43,8 +47,11 @@ function hack() {
 
           // Check if there are any elements with both classes
           if (playerEndMeElements.length > 0) {
+            console.log("Still block remaining");
+            // Speichere den Zustand der Blockade
+            chrome.storage.local.set({ settingsBlocked: true });
             // User has both classes, clear the interval
-            console.log("User  has both player-end and player-me classes.");
+            console.log("User has both player-end and player-me classes.");
             clearInterval(intervalId); // Stop the interval
           } else {
             // User doesn't have both classes

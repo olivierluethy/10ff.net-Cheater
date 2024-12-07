@@ -45,6 +45,23 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.set({ randomly: isChecked }); // Speichern in Storage
     updateToggleText(isChecked); // Aktualisiere den Text sofort
   });
+
+  const startHackButton = document.getElementById("startHack");
+
+  // Überprüfe, ob die Einstellungen blockiert sind
+  chrome.storage.local.get(["settingsBlocked"], (data) => {
+    const settingsBlocked = data.settingsBlocked || false; // Standard: nicht blockiert
+    if (settingsBlocked) {
+      // Blockiere die Einstellungen
+      startHackButton.style.backgroundColor = "white";
+      startHackButton.style.borderColor = "1px solid black";
+      startHackButton.style.color = "black";
+      startHackButton.innerHTML = "Hack started";
+      startHackButton.disabled = true;
+
+      checkboxSubs.disabled = true;
+    }
+  });
 });
 
 // Listener für Nachrichten vom Content Script

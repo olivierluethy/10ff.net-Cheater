@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>10ff.net Cheater</title>
+  </head>
+  <body>
+    <!-- Header: wordmark + live telemetry status -->
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand__mark" src="../../logo.png" alt="" width="34" height="34" />
+        <div class="brand__text">
+          <span class="brand__name">10ff <b>CHEATER</b></span>
+          <span class="brand__tag">throttle control</span>
+        </div>
+      </div>
+      <span class="status" id="status" data-state="idle">
+        <span class="status__dot"></span>
+        <span class="status__label" id="statusLabel">Idle</span>
+      </span>
+    </header>
+
+    <!-- Not on 10ff.net hint -->
+    <p class="hint" id="siteHint" hidden>
+      Open <b>10ff.net</b> in this tab to run the cheater.
+    </p>
+
+    <!-- Primary action -->
+    <div class="actions">
+      <button id="startBtn" class="btn btn--primary" type="button">
+        Start auto-typing
+      </button>
+      <button id="restartBtn" class="btn btn--ghost" type="button" hidden>
+        Restart race
+      </button>
+    </div>
+
+    <!-- Throttle: mode presets + live speed fader -->
+    <section class="panel" id="throttlePanel">
+      <div class="panel__head">
+        <span class="eyebrow">Throttle</span>
+        <span class="readout" id="speedReadout">250 ms · ~240 WPM</span>
+      </div>
+
+      <div class="modes" id="modes" role="group" aria-label="Speed mode">
+        <button class="mode" type="button" data-mode="slow">Slow</button>
+        <button class="mode" type="button" data-mode="human">Human</button>
+        <button class="mode" type="button" data-mode="fast">Fast</button>
+        <button class="mode" type="button" data-mode="max">Max</button>
+      </div>
+
+      <div class="fader">
+        <input
+          type="range"
+          id="throttle"
+          class="fader__input"
+          min="0"
+          max="1000"
+          step="1"
+          aria-label="Typing speed"
+        />
+        <div class="fader__scale">
+          <span>Slow</span>
+          <span class="fader__redline">Redline</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Variance: humanize the timing -->
+    <section class="panel">
+      <div class="row">
+        <label class="switch" for="randomize">
+          <input type="checkbox" id="randomize" />
+          <span class="switch__track"><span class="switch__thumb"></span></span>
+          <span class="switch__label">Vary the timing</span>
+        </label>
+      </div>
+      <div class="field" id="jitterField">
+        <div class="field__head">
+          <span class="field__label">Timing spread</span>
+          <span class="readout readout--sm" id="jitterReadout">± 150 ms</span>
+        </div>
+        <input type="range" id="jitter" class="slider" min="0" max="500" step="10" />
+      </div>
+    </section>
+
+    <!-- Accuracy -->
+    <section class="panel">
+      <div class="field">
+        <div class="field__head">
+          <span class="eyebrow">Accuracy</span>
+          <span class="readout" id="accuracyReadout">100%</span>
+        </div>
+        <input type="range" id="accuracy" class="slider" min="70" max="100" step="1" />
+        <p class="field__note" id="accuracyNote">Every word typed perfectly.</p>
+      </div>
+    </section>
+
+    <!-- Telemetry: session stats -->
+    <section class="panel panel--telemetry">
+      <div class="panel__head">
+        <span class="eyebrow">Telemetry</span>
+        <button id="clearStats" class="link" type="button" hidden>Clear</button>
+      </div>
+
+      <div class="stat-grid" id="lastStats">
+        <div class="stat">
+          <span class="stat__value" id="statWpm">—</span>
+          <span class="stat__label">WPM</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="statAcc">—</span>
+          <span class="stat__label">Accuracy</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="statWords">—</span>
+          <span class="stat__label">Words</span>
+        </div>
+      </div>
+
+      <p class="empty" id="statsEmpty">No races yet — start one to log telemetry.</p>
+
+      <div class="history" id="history" hidden>
+        <div class="history__chart" id="historyChart" aria-hidden="true"></div>
+        <div class="history__legend">
+          <span>Best <b id="bestWpm">0</b></span>
+          <span>Avg <b id="avgWpm">0</b> WPM</span>
+          <span>Avg <b id="avgAcc">0</b>% acc</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer__support">
+        <a
+          class="support"
+          href="https://chromewebstore.google.com/detail/10ffnet-cheater/kobmjnmgkoecfpjkjdpbdhblkiagobgm/reviews"
+          target="_blank"
+          rel="noopener"
+          title="Rate us on the Chrome Web Store"
+          >Rate us 👍</a
+        >
+        <a
+          class="support"
+          href="https://buymeacoffee.com/olivierluethy"
+          target="_blank"
+          rel="noopener"
+          title="Support the project"
+          >Buy me a coffee ☕</a
+        >
+      </div>
+      <p class="footer__copy" id="copyright"></p>
+    </footer>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
